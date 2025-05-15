@@ -11,40 +11,39 @@
 #     runs-on: ubuntu-latest
 
 #     steps:
-#     - name: Checkout code
+#     - name: 🧾 Checkout code
 #       uses: actions/checkout@v3
 
-#     - name: Set up Python
+#     - name: 🐍 Set up Python
 #       uses: actions/setup-python@v4
 #       with:
 #         python-version: '3.10'
 
-#     - name: Install dependencies
+#     - name: 📦 Install dependencies
 #       run: |
 #         python -m pip install --upgrade pip
 #         pip install -r requirements.txt
 
-#     - name: Run model training
+#     - name: 🧠 Run model training
 #       run: python train_model.py
 
-#     - name: Run FastAPI app check (syntax only)
-#       run: |
-#         python -m py_compile main.py
+#     - name: 🔍 Check FastAPI app (syntax only)
+#       run: python -m py_compile main.py
 
-#     - name: Build Docker image
+#     - name: 🐳 Build Docker image
 #       run: docker build -t churn-api .
 
-#     Optional: Push to Docker Hub
-#     - name: Log in to Docker Hub
+#     - name: 🔐 Log in to Docker Hub
 #       uses: docker/login-action@v2
 #       with:
 #         username: rampucsd15
 #         password: 1415Pandu
 
-#     - name: Push to Docker Hub
+#     - name: 📤 Push Docker image to Docker Hub
 #       run: |
 #         docker tag churn-api rampucsd15/churn-api:latest
 #         docker push rampucsd15/churn-api:latest
+
 
 name: Churn Prediction CI/CD
 
@@ -55,39 +54,38 @@ on:
     branches: [ main ]
 
 jobs:
-  build:
+  build-and-dockerize:
     runs-on: ubuntu-latest
 
     steps:
-    - name: 🧾 Checkout code
-      uses: actions/checkout@v3
+      - name: 🧾 Checkout code
+        uses: actions/checkout@v3
 
-    - name: 🐍 Set up Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: '3.10'
+      - name: 🐍 Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
 
-    - name: 📦 Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install -r requirements.txt
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-    - name: 🧠 Run model training
-      run: python train_model.py
+      - name: 🧠 Run model training
+        run: python train_model.py
 
-    - name: 🔍 Check FastAPI app (syntax only)
-      run: python -m py_compile main.py
+      - name: 🔍 Check FastAPI app (syntax only)
+        run: python -m py_compile main.py
 
-    - name: 🐳 Build Docker image
-      run: docker build -t churn-api .
+      - name: 🔐 Log in to Docker Hub
+        uses: docker/login-action@v2
+        with:
+          username: rampucsd15
+          password: 1415Pandu
 
-    - name: 🔐 Log in to Docker Hub
-      uses: docker/login-action@v2
-      with:
-        username: rampucsd15
-        password: 1415Pandu
-
-    - name: 📤 Push Docker image to Docker Hub
-      run: |
-        docker tag churn-api rampucsd15/churn-api:latest
-        docker push rampucsd15/churn-api:latest
+      - name: 🐳 Build and push Docker image
+        uses: docker/build-push-action@v4
+        with:
+          context: .
+          push: true
+          tags: rampucsd15/churn-api:latest
