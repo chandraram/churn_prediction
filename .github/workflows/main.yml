@@ -103,7 +103,7 @@ jobs:
       uses: appleboy/ssh-action@v0.1.10
       with:
         host: 18.212.42.129
-        username: manojyadav79327
+        username: ubuntu 
         key: ${{ secrets.EC2_SSH_KEY }}
         script: |
           docker pull rampucsd15/churn-api:latest
