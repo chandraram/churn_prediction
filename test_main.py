@@ -11,7 +11,7 @@ def test_predict_churn():
         "Contract": "Month-to-month"
     }
 
-    response = client.post("/predict", json=payload)
+    response = client.post("/predict/model", json=payload)
     
     assert response.status_code == 200
     data = response.json()

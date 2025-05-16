@@ -16,7 +16,7 @@ class CustomerData(BaseModel):
     TotalCharges: float
     Contract: str
 
-@app.post("/predict")
+@app.post("/predict/model")
 def predict_churn(data: CustomerData):
     # Transform input
     contract_encoded = encoder.transform([data.Contract])[0]
