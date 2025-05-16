@@ -1,4 +1,52 @@
-name: 🚀 Churn Prediction CI/CD
+# name: 🚀 Churn Prediction CI/CD
+
+# on:
+#   push:
+#     branches: [ main ]
+#   pull_request:
+#     branches: [ main ]
+
+# jobs:
+#   build-train-dockerize:
+#     runs-on: ubuntu-latest
+
+#     steps:
+#     - name: 🧾 Checkout code
+#       uses: actions/checkout@v3
+
+#     - name: 🐍 Set up Python 3.10
+#       uses: actions/setup-python@v4
+#       with:
+#         python-version: '3.10'
+
+#     - name: 📦 Install dependencies
+#       run: |
+#         python -m pip install --upgrade pip
+#         pip install -r requirements.txt
+
+#     - name: 🧠 Train ML model
+#       run: python train_model.py
+
+#     - name: 🔍 Syntax check FastAPI app
+#       run: python -m py_compile main.py
+
+#     - name: 🐳 Set up Docker Buildx
+#       uses: docker/setup-buildx-action@v3
+
+#     - name: 🔐 Log in to Docker Hub
+#       uses: docker/login-action@v3
+#       with:
+#         username: rampucsd15
+#         password: 1415Pandu
+
+#     - name: 🐳 Build and Push Docker image
+#       uses: docker/build-push-action@v4
+#       with:
+#         context: .
+#         push: true
+#         tags: rampucsd15/churn-api:latest
+
+name: 🚀 Churn Prediction CI/CD 
 
 on:
   push:
@@ -36,8 +84,8 @@ jobs:
     - name: 🔐 Log in to Docker Hub
       uses: docker/login-action@v3
       with:
-        username: rampucsd15
-        password: 1415Pandu
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
 
     - name: 🐳 Build and Push Docker image
       uses: docker/build-push-action@v4
@@ -45,3 +93,45 @@ jobs:
         context: .
         push: true
         tags: rampucsd15/churn-api:latest
+
+  deploy-to-ec2:
+    needs: build-train-dockerize
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: 🚀 Deploy to EC2 via SSH
+      uses: appleboy/ssh-action@v0.1.10
+      with:
+        host: 3.86.103.187
+        username: manojyadav79327
+        key: '''-----BEGIN RSA PRIVATE KEY-----
+MIIEpAIBAAKCAQEAqTsF5wqWTGsoOJWzHdpVcvxauIDJHjDvVLv12juMuEB51Gsb
+YWPB+thhieHAoZzbmZHofBxeiOEVWgHfOminnNUTdr+583iosGQFj2iWHrfcmNJM
+UPxCfyLzoFyA8PFCI8es/9TSiGDIQQQohQw3mcdO+8MLIa0jmYORDRAuf4glJbXx
+MmFa6sdK2Aj16K8ULCtakt/ciPkFQA7JI8tLjLvM6W+PBHVN4G7SNcNOXAakS6v4
+NBX3eWgC0sJJKaWDuFvZDGAyshvWs2Qqzr9+6vUcJJfJG+TtGlT9LcQQhqygUuRx
+gjZ2uEr8smYo9+Jt/RubcSRxfy6RQdLxjFQlVwIDAQABAoIBAAMd4iryJ/h6VMBO
+CYF4PvCiMy2IuauDrTS7TXjadeoCzfuaiWOOycjL6Wf3r2uKjwTSCh0XDKqqspD4
+zdquiL+7sOMT/uG8DCdLgEq222Tvb/GkleE79CGRTDlc2scVOmmcSNRhYAtA9Q81
+e2WP5wo/AHZkjjTtkmVGZgp+jMyudozGjdsJzA08WQYELosAr3faYx1CBRHCBfHM
++gAJ/nadkfN/Q+moDGJfsuqz5ES7qMR2xtjk33BX7LS8BA2bVZlmaBbDfRbVUYwf
+3XG6pvbVvwc7cZyrt6qLuOy+UnS6T9oaMu0IOmLwYyzXXvnfDW27AklfRKnoION1
+oTwb4nkCgYEA14Z/nUFGezU9H5VNHj49m2D6EKcYjmdwhkNo3GKnd3EB+sRcZkPM
+7FMp8cwbKTVoS3NbHHkznyuXdiF4SPcMhXq0RlGn5YkixT/x+r5+YZP0h11ulR29
+/1TLSVFBW3IhbAxQ0lhOWp+kd0O+bTmE+CNJL1pvPslPR29d4h3EDlsCgYEAyQLg
+FT9xLYqckP1VtKF8nPKsT7kPIukYkol/J0onwHdYIvBt2XH6dCByNBsCgRFsnEPx
+/EAjz+FbP/xuGidGO2F/Yh+OICCdXKavkzLOOTu0CyHWhMbv7KfDFLDEM+c0VXym
+fgcXGzZkUrFZgjbUYfW50MDnPsNHQkYm3JWQLbUCgYB5TAT+aAJWzTu9TrW8U6Mw
+k3+pZ6F2Y9j8d2vIvO0rV7qZe3HVTEtEpflxUEHpC1nLPP0GJWBcMJhpr6SWzBOL
+++cBvGsVz/x1ruttB1DxceepV3gpDDgmP365oLV71dvhh3zlJTXT4w0Y4lOF/V1M
+me9Saz84wuuPdKoN3Fq/CQKBgQCdhB9NBzYNVf1ysNKkhZc89f2JS59M4BRdYFm/
+1CBqdhse5gFu0B5POc3EfxXrRlgx7ByIa0qk8BetgIZXAEfM6I4FumyJSIWHwSb8
+1mc7+kkQICgWTD5e2OfKIurdMWSVSOS/BZdZv7nGAyv9GjI7wW8m4sNTL3t7t7Vk
+Td95sQKBgQCUQaKJkY6vSh1LzBYptL0nWZAPqPCR/p2c7dNC2fl/a8KjZD4gDAnN
+stil0psSzbRk7Z1qPXFRlGWiqyDZsWlIwI/unA3yTzZozZYIbq87wNx58BZN/cj9
+F8m5V2JRMXGDIeFp9AWeSZcB70SLlQkn7Clwi8WXQlnMUneeIaK8WA==
+-----END RSA PRIVATE KEY-----'''
+        script: |
+          docker pull rampucsd15/churn-api:latest
+          docker stop churn-api || true && docker rm churn-api || true
+          docker run -d -p 80:8000 --name churn-api rampucsd15/churn-api:latest
