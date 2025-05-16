@@ -102,9 +102,9 @@ jobs:
     - name: 🚀 Deploy to EC2 via SSH
       uses: appleboy/ssh-action@v0.1.10
       with:
-        host: 3.86.103.187
+        host: 18.212.42.129
         username: manojyadav79327
-        key: '''-----BEGIN RSA PRIVATE KEY-----
+        key: -----BEGIN RSA PRIVATE KEY-----
 MIIEpAIBAAKCAQEAqTsF5wqWTGsoOJWzHdpVcvxauIDJHjDvVLv12juMuEB51Gsb
 YWPB+thhieHAoZzbmZHofBxeiOEVWgHfOminnNUTdr+583iosGQFj2iWHrfcmNJM
 UPxCfyLzoFyA8PFCI8es/9TSiGDIQQQohQw3mcdO+8MLIa0jmYORDRAuf4glJbXx
@@ -130,7 +130,7 @@ me9Saz84wuuPdKoN3Fq/CQKBgQCdhB9NBzYNVf1ysNKkhZc89f2JS59M4BRdYFm/
 Td95sQKBgQCUQaKJkY6vSh1LzBYptL0nWZAPqPCR/p2c7dNC2fl/a8KjZD4gDAnN
 stil0psSzbRk7Z1qPXFRlGWiqyDZsWlIwI/unA3yTzZozZYIbq87wNx58BZN/cj9
 F8m5V2JRMXGDIeFp9AWeSZcB70SLlQkn7Clwi8WXQlnMUneeIaK8WA==
------END RSA PRIVATE KEY-----'''
+-----END RSA PRIVATE KEY-----
         script: |
           docker pull rampucsd15/churn-api:latest
           docker stop churn-api || true && docker rm churn-api || true
