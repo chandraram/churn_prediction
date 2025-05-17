@@ -1,4 +1,4 @@
-#ci cd pipe line code 
+#ci cd pipe line code use to deploy in ec2
 name: 🚀 Churn Prediction CI/CD
 
 on:
