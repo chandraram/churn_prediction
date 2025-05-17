@@ -1,4 +1,4 @@
-#ci cd pipe line code use to deploy in ec2 without s3 with
+#converstion store in s3 bucket
 name: 🚀 Churn Prediction CI/CD
 
 on:
